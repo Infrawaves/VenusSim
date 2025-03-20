@@ -1,0 +1,31 @@
+{
+    "scheduling-policy": "LIFO",
+    "endpoint-delay": 10,
+    "active-chunks-per-dimension": 1,
+    "preferred-dataset-splits": 4,
+    "all-reduce-implementation": [
+        "ring","ring"
+    ],
+    "all-gather-implementation": [
+        "ring","ring"
+    ],
+    "reduce-scatter-implementation": [
+        "ring","ring"
+    ],
+    "all-to-all-implementation": [
+        "ring","ring"
+    ],
+    "collective-optimization": "localBWAware",
+    "local-mem-bw": 50,
+    "boost-mode": 0,
+    "trace-enabled": 1,
+    "replay-only": 0,
+    "roofline-enabled": 1,
+    "peak-perf": 1000,
+    "mfu": 1,
+    "ignore-bandwidth": 1,
+    "log-level": 2,
+    "align-with-nccl": 1,
+    "simplified-trace": 1,
+    "template-trace": 1
+}

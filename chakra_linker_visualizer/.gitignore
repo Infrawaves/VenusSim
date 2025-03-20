@@ -1,0 +1,9 @@
+*.egg-info/
+build/
+*_pb2*.py*
+*.pyc
+__pycache__/
+*.egg
+*.et
+*.dot
+.pyre

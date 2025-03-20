@@ -1,0 +1,61 @@
+{   
+    "trace_generator_config": {
+        "mlp-worker-num": 2,
+        "world-size": 16, 
+        "pipeline-model-parallel-size": 8, 
+        "context-parallel-size": 1, 
+        "tensor-model-parallel-size": 1, 
+        "sequence-parallel": 1, 
+        "vpp-enable": 1,
+        "num-layers-per-virtual-pipeline-stage": 2, 
+        "global-batch-size-mlp-multiplier": 32,
+        "micro-batch-size": 2, 
+        "forward_only": 0, 
+        "no-overlap-p2p-communication": 0, 
+        "use-distributed-optimizer": 1,
+        "overlap-grad-reduce": 1,
+        "no-delay-grad-reduce":  0,
+        "overlap-param-gather": 1,
+        "delay-param-gather": 0,
+        "train-iters": 5,
+
+        "model-type": "decoder_only",
+        "seq-length": 2048, 
+        "decoder-seq-length": 2048, 
+        "hidden-size": 4096,
+        "ffn-hidden-size": 16384,
+        "num-attention-heads": 16,
+        "num-query-groups": 4,
+        "num-layers": 32,
+        "vocab-size": 50000,
+        "swiglu": 1,
+        "untie-embeddings-and-output-weights": 0,
+
+        "output_filepath": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace",
+        "output_filename": "demo", 
+        "log_filename": "demo.log",
+
+        "trace_generate": 1,
+        "use_chakra": 0,
+        "use_simplified_trace": 1,
+        "use_simplified_template_trace": 1, 
+
+        "use_step_snapshot": 0,
+        "step_snapshot_data": [288, 285, 293],
+
+        "total_file_size_gb_limit": 10, 
+        "keep_json_files": 0
+    },
+    "simulator_config": {
+        "binary": "/home/llm-sim-project/llm-simulator/build/astra_analytical/build/bin/AstraSim_Analytical_Congestion_Unaware",
+        "system": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/system.json",
+        "network": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/network.yml",
+        "remote_memory": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/memory.json",
+        "comm_group": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/comm-group.json",
+        "trace_output": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace_output.log"
+    },
+    "time_line_visualizer_config": {
+        "output_filename": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace_output.json",
+        "single_pp_group": 0
+    }
+}

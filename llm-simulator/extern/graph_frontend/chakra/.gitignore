@@ -1,0 +1,10 @@
+*.egg-info/
+build/
+*_pb2*.py*
+*.pyc
+__pycache__/
+*.egg
+*.et
+*.dot
+et_def/et_def.pb.cc
+et_def/et_def.pb.h

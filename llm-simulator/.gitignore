@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+._*
+
+# CMake
+cmake-build-debug/
+compile_commands.json
+
+# JetBrains
+.idea/
+
+# Analytical Model build and result files
+build/astra_analytical/build/
+build/astra_analytical/result/
+build/astra_garnet/build/
+build/astra_garnet/result/
+
+# Generated Chakra ET files
+*.eg
+*.et
+
+# vscode
+.vscode
+
+# logs
+**/*.log
+
+# runs
+runs

@@ -1,0 +1,14 @@
+*.egg-info/
+build/
+*_pb2*.py*
+**/*.pyc
+**/__pycache__/
+*.egg
+*.et
+*.dot
+**/trace/
+*.log
+trace_output.json
+**/comm-group.json
+
+

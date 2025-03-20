@@ -1,0 +1,22 @@
+# 这个文件告诉GitLab不要使用Auto DevOps
+image: "docker:latest"
+ 
+stages:
+  - build
+  - test
+  - deploy
+ 
+build_job:
+  stage: build
+  script:
+    - echo "No Auto DevOps for me!"
+ 
+test_job:
+  stage: test
+  script:
+    - echo "Running tests..."
+ 
+deploy_job:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
