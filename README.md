@@ -1,28 +1,30 @@
 # VenusSim
 
-欢迎使用VenusSim！这是由Infrawaves团队开发的一款专为LLM训练设计的仿真模拟器。我们注重性能与灵活性，旨在提供一个轻量且精确的模拟环境，帮助开发者高效地进行研究和开发工作。让我们一起提升工作效率，探索更多可能性。
+Welcome to **VenusSim**! This is a simulator specifically designed for LLM training, developed by the **Infrawaves** team. We focus on performance and flexibility, aiming to provide a **lightweight** and **accurate** simulation environment to help developers efficiently conduct research and development work. Let's work together to enhance productivity and explore more possibilities.
 
-## 使用指南
+[简体中文]: README_CN.md
 
-VenusSim的使用流程如下：
+## User Guide
 
-1. 安装VenusSim。
-2. 修改配置文件。
-3. 运行仿真。
-4. 查看仿真结果。
+The usage process of VenusSim is as follows:
 
-### 1. 安装VenusSim
+1. Install VenusSim.
+2. Modify the configuration file.
+3. Run the simulation.
+4. View the simulation results.
 
-#### 1.1 容器构建
+### 1. Install VenusSim
 
-1. 创建容器
+#### 1.1 Container Construction
+
+1. Create Container
 
 ```Plain
-# 创建基础容器
+# Create Base Container
 docker run -it --name llm-sim ubuntu:latest /bin/bash
 ```
 
-2. 将以下内容拷贝到/home/build.sh
+2. Copy the following content to /home/build.sh
 
 ```
 apt update
@@ -33,9 +35,9 @@ apt install \
     libboost-dev libboost-program-options-dev \
     libprotobuf-dev protobuf-compiler \
     git
-#拉取VenusSim
+#Pull VenusSim
 git clone git@github.com:cq-eng/VenusSim.git
-#改目录
+#Change Directory
 mv VenusSim llm-sim-project
 
 #astra-sim
@@ -56,149 +58,151 @@ cd extern/et_replay
 pip install .
 ```
 
-3. 运行build.sh
+3. Run build.sh
 
 ```
 bash build.sh
 ```
 
-#### 1.2 文件结构
+#### 1.2 File Structure
 
-完成容器构建后，/home目录下应有如下文件结构：
+After completing the container construction, the /home directory should have the following file structure:
 
 ```Python
 /home/llm-sim-project
-    # python虚拟环境，用于chakra_lingker_visualizer和generator
+    # Python virtual environment, used for chakra_lingker_visualizer and generator.
     /chakra_env
-    # chakra原生trace_linker和timeline_visualizer
+    # Chakra native trace_linker and timeline_visualizer.
     /chakra_linker_visualizer
     # astra-sim
     /llm-simulator
-    # trace生成器
+    # trace generator
     /trace-generator
 ```
 
-确认文件结构完整后，即安装完成。
+After confirming the file structure is complete, the installation is finished.
 
-### 2. 修改配置文件
+### 2. Modify Configuration File
 
-配置文件位于trace-generator/demo/llm-sim-example中
+The configuration file is located in trace-generator/demo/llm-sim-example.
 
 - llm-sim-config.json
 - Sim-config
   - system.json
   - network.yml
-  - memory.json （无需修改）
-  - comm-group.json (自动生成，无需修改）
+  - memory.json
+  - comm-group.json
 
 #### 2.1 llm-sim-config.json
 
-llm-sim-config.json由**trace_generator_config**, **simulator_config**和**time_line_visualizer_config**三部分组成
+The `llm-sim-config.json` consists of three parts: **`trace_generator_config`**, **`simulator_config`**  and **`time_line_visualizer_config`**
 
 **trace_generator_config**
 
-该配置文件用来配置trace的生成，具体参数说明如下：
+This configuration file is used to configure the generation of traces. The specific parameter descriptions are as follows:
 
-| **megatron参数配置**                    |                                                              |
+| Megatron config params                  |                                                              |
 | --------------------------------------- | ------------------------------------------------------------ |
-| `mlp-worker-num`                        | 仿真机器数目                                                 |
-| `world-size`                            | 总GPU数目                                                    |
+| `mlp-worker-num`                        | Machine Count                                                |
+| `world-size`                            | Total GPU Count                                              |
 | `pipeline-model-parallel-size`          | PP size                                                      |
 | `context-parallel-size`                 | CP size                                                      |
 | `tensor-model-parallel-size`            | TP size                                                      |
 | `sequence-parallel`                     | SP size                                                      |
-| `vpp-enable`                            | 是否开启 VPP     0：不开启   1：开启                         |
-| `num-layers-per-virtual-pipeline-stage` | 开启VPP时，每个PP stage包含的的模型层数                      |
-| `global-batch-size-mlp-multiplier`      | global-batch-size-mlp-multiplier含义为：global-batch-size = mlp-worker-num * global-batch-size-mlp-multiplier |
+| `vpp-enable`                            | 0: Disabled  1: Enabled                                      |
+| `num-layers-per-virtual-pipeline-stage` | Number of model layers included in each PP stage             |
+| `global-batch-size-mlp-multiplier`      | global-batch-size = mlp-worker-num * global-batch-size-mlp-multiplier |
 | `micro-batch-size`                      | Micro batch size                                             |
-| `forward_only`                          | megatron是否只开启forward    0：不开启   1：开启             |
-| `no-overlap-p2p-communication`          | 是否开启p2p overlap    1：不开启   0：开启                   |
-| `use-distributed-optimizer`             | 是否开启distributed-optimizer    1：不开启   0：开启         |
-| `overlap-grad-reduce`                   | 是否开启grad reduce overlap   0：不开启   1：开启            |
-| `no-delay-grad-reduce`                  | 是否开启grad-reduce延时    1：不开启   0：开启               |
-| `overlap-param-gather`                  | 是否开启param-gathe overlap    0：不开启   1：开启           |
-| `delay-param-gather`                    | 是否开启param-gather延时    0：不开启   1：开启              |
-| `train-iters`                           | 训练迭代数目                                                 |
-| **模型参数配置**                        |                                                              |
+| `forward_only`                          | 0: Disabled  1: Enabled                                      |
+| `no-overlap-p2p-communication`          | 1: Disabled  0: Enabled                                      |
+| `use-distributed-optimizer`             | 0: Disabled  1: Enabled                                      |
+| `overlap-grad-reduce`                   | 0: Disabled  1: Enabled                                      |
+| `no-delay-grad-reduce`                  | 1: Disabled  0: Enabled                                      |
+| `overlap-param-gather`                  | 0: Disabled  1: Enabled                                      |
+| `delay-param-gather`                    | 0: Disabled  1: Enabled                                      |
+| `train-iters`                           | Number of training iterations                                |
+| **Model config params**                 |                                                              |
 | `model-type`                            |                                                              |
-| `seq-length`                            | 序列长度                                                     |
-| `decoder-seq-length`                    | 解码器序列长度                                               |
-| `hidden-size`                           | 隐藏层大小                                                   |
-| `ffn-hidden-size`                       | FFN隐藏层大小                                                |
-| `num-attention-heads`                   | 注意力头数目                                                 |
-| `num-query-groups`                      | MQA组数                                                      |
-| `num-layers`                            | 模型层数                                                     |
-| `vocab-size`                            | 词表大小                                                     |
-| `swiglu`                                | 是否开启Swish-Gated Linear Unit    0：不开启   1：开启       |
-| `untie-embeddings-and-output-weights`   | 输入`embedding`和输出`embedding`是否共享参数   0：不共享   1：共享 |
-| **trace生成参数配置**                   |                                                              |
-| `output_filepath`                       | trace输出路径                                                |
-| `output_filename`                       | trace输出名称                                                |
-| `log_filename`                          | 生成trace时的log文件名称                                     |
-| `trace_generate`                        | 设置为0时将跳过trace生成阶段，一般在已经生成过trace想多次运行simulaor时使用。 |
-| `use_chakra`                            | 使用chakra作为simulator的trace输入。使用时需将[llm-simulator](http://183.207.7.174:8081/moon/llm-simulator/llm-simulator)中的：llm-simulator/astra-sim/workload/ETDefinition.hh中的“#define Use_Chakra”取消注释并重新编译llm-simulator。 |
-| `use_simplified_trace`                  | 使用简化trace作为simulator的trace输入（相比chakra节省大量内存）使用时需将[llm-simulator](http://183.207.7.174:8081/moon/llm-simulator/llm-simulator)中的：llm-simulator/astra-sim/workload/ETDefinition.hh中的“#define Use_Chakra”注释并重新编译llm-simulator(**项目默认使用此配置，安装时已按该配置编译**)。 |
-| `use_simplified_template_trace`         | 使用简化的模板trace作为simulator的trace输入（相比简化trace节省内存，但略微增加运行时间）使用时需开启use_simplified_trace并满足简化trace的运行条件。 |
-| `total_file_size_gb_limit`              | trace文件的总大小限制，超过此大小系统将删除生成的json文件，只保留用于仿真的.et文件。 |
-| `keep_json_files`                       | 使用时忽略total_file_size_gb_limit，强制保存json文件         |
-| `use_step_snapshot`                     | 设置为1时，将强制使用step_snapshot_data中的数据作为前后向的计算时间 |
-| `step_snapshot_data`                    | 有三个数据，分别为pp-0, pp-mid, pp-end三个阶段的前后向时间之和（前向：后向=1：2） |
+| `seq-length`                            | Sequence Length                                              |
+| `decoder-seq-length`                    | Decoder Sequence Length                                      |
+| `hidden-size`                           | Hidden Layer Size                                            |
+| `ffn-hidden-size`                       | FFN Hidden Layer Size                                        |
+| `num-attention-heads`                   | Number of Attention Heads                                    |
+| `num-query-groups`                      | Number of MQA Groups                                         |
+| `num-layers`                            | Number of Model Layers                                       |
+| `vocab-size`                            | Vocabulary Size                                              |
+| `swiglu`                                | Swish-Gated Linear Unit    0: Disabled   1: Enabled          |
+| `untie-embeddings-and-output-weights`   | Whether Input `embedding` and Output `embedding` Share Parameters  0: Not Shared   1: Shared |
+| **Trace generation config params**      |                                                              |
+| `output_filepath`                       | Trace output path                                            |
+| `output_filename`                       | Trace output name                                            |
+| `log_filename`                          | Log file name during trace generation                        |
+| `trace_generate`                        | When set to 0, the trace generation phase will be skipped, typically used when the trace has already been generated and the simulator needs to be run multiple times |
+| `use_chakra`                            | Use Chakra as the trace input for the simulator. When using it, you need to uncomment the line `#define Use_Chakra` in `llm-simulator/astra-sim/workload/ETDefinition.hh` from the `llm-simulator` and recompile the `llm-simulator`. |
+| `use_simplified_trace`                  | Use simplified traces as the trace input for the simulator (saving significant memory compared to Chakra). When using it, you need to comment out the line `#define Use_Chakra` in `llm-simulator/astra-sim/workload/ETDefinition.hh` from the `llm-simulator` and recompile the `llm-simulator` (**this configuration is the default for the project and has been compiled accordingly during installation**). |
+| `use_simplified_template_trace`         | Use simplified template traces as the trace input for the simulator (saving memory compared to simplified traces but slightly increasing runtime). When using it, you need to enable `use_simplified_trace` and meet the runtime conditions for simplified traces. |
+| `total_file_size_gb_limit`              | The total size limit for trace files. If this size is exceeded, the system will delete the generated `JSON` files and retain only the `.et` files used for simulation. |
+| `keep_json_files`                       | Ignore `total_file_size_gb_limit` during use and force saving `JSON` files. |
+| `use_step_snapshot`                     | When set to 1, it will forcibly use the data in `step_snapshot_data` as the computation time for forward and backward passes. |
+| `step_snapshot_data`                    | There are three data points, representing the sum of forward and backward times for the pp-0, pp-mid, and pp-end stages (forward: backward = 1:2). |
 
 **simulator_config**
 
-| binary        | llm-simulator编译后的可执行文件，一般在llm-simulator/build/astra_analytical/build/bin路径中 |
+| binary        | The compiled executable file of `llm-simulator`, usually located in the llm-simulator/build/astra_analytical/build/bin path. |
 | ------------- | ------------------------------------------------------------ |
-| system        | sim-config中的system.json的绝对路径                          |
-| network       | sim-config中的network.yml的绝对路径                          |
-| remote_memory | sim-config中的memory.json的绝对路径                          |
-| comm_group    | sim-config中的comm_group.json的绝对路径                      |
-| trace_output  | llm-simulator的运行结果输出文件路径                          |
+| system        | The absolute path of `system.json` in sim-config.            |
+| network       | The absolute path of `system.json` in sim-config             |
+| remote_memory | The absolute path of `memory.json` in sim-config             |
+| comm_group    | The absolute path of `comm_group.json` in sim-config         |
+| trace_output  | The output file path for `llm-simulator`'s execution results |
 
 **time_line_visualizer_config**
 
-| output_filename | 可视化后的输出文件路径                                       |
+| output_filename | The output file path after visualization                     |
 | --------------- | ------------------------------------------------------------ |
-| single_pp_group | 使用时将只输出一个pp组的可视化结果，当rank过多时，将显著减少运行时间，并减少重复性输出 |
+| single_pp_group | When set to 1, only the visualization result of one PP group will be output. When there are too many ranks, this will significantly reduce runtime and minimize redundant output. |
 
 #### 2.2 Sim-config
 
 - system.json
 - network.yml
-- memory.json （无需修改）
-- comm-group.json (自动生成，无需修改）
+- memory.json （No modification required）
+- comm-group.json (Automatically generated, no modification required）
 
-上述文件只要根据实际仿真场景修改`system.json`和`network.yml`。`system.json`包含仿真器的一些系统参数，`network.yml`用来配置仿真器的网络参数。`system.json` 一般保持默认配置，`network.yml`的具体含义可参考[Astra-Sim](https://astra-sim.github.io/astra-network-analytical-docs/input-format/input-format.html),以下为一个具体demo：
+For the above files, only `system.json` and `network.yml` need to be modified according to the actual simulation scenario. `system.json` contains some system parameters of the simulator, while `network.yml` is used to configure the network parameters of the simulator. `system.json` generally remains in its default configuration. For the specific meaning of `network.yml`, please refer to [Astra-Sim](https://astra-sim.github.io/astra-network-analytical-docs/input-format/input-format.html). 
+
+Below is a specific demo:
 
 ```yaml
-# 一维FullyConnected，二维Ring
+# Dim0 FullyConnected, Dim1 Ring.
 topology: [ FullyConnected, Ring ] 
 
-# 16 NPUs：一维8卡，二维2卡
+# 16 NPUs：Dim0 8 NPUs，Dim1 2 NPUs
 npus_count: [ 8, 2 ]  # number of NPUs
 
-# 每一维 link Bandwidth (per direction)
+# link Bandwidth (per direction)
 bandwidth: [ 450.0, 50.0 ]  # GB/s
 
-# 每一维 link Latency
+# link Latency
 latency: [ 1000.0, 6000.0 ]  # ns
 ```
 
-### 3. 运行仿真
+### 3. Run the simulation.
 
-确认安装和配置文件无误后，可输入下列指令进行demo的仿真
+After confirming the installation and configuration files are correct, you can enter the following command to run the demo simulation.
 
 ```Python
-# 进入虚拟环境
+# Enter the virtual environment
 source /home/llm-sim-project/chakra_env/bin/activate
 
-# 进入trace-generator目录
+# Switch to the trace-generator directory
 cd /home/llm-sim-project/trace-generator
 
-# 运行仿真程序,llm-sim-config.json的路径根据实际路径填写
+# Run the simulation program, and fill in the path to llm-sim-config.json according to the actual path.
 python3 llm_sim.py --config-file demo/llm-sim-example/llm-sim-config.json
 ```
 
-### 4. 查看仿真结果
+### 4. View the simulation results
 
-1. 在浏览器中打开https://ui.perfetto.dev/
-2. 将`llm-sim-config.json`中`time_line_visualizer_config:output_filename`指定的可视化输出文件在以上网址中打开，即可查看可视化仿真结果。
+1. Open <https://ui.perfetto.dev/> in your browser.
+2. Open the visualization output file specified by `time_line_visualizer_config:output_filename` in `llm-sim-config.json` at the above URL to view the visual simulation results.
