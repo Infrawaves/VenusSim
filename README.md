@@ -2,7 +2,7 @@
 
 Welcome to **VenusSim**! This is a simulator specifically designed for LLM training, developed by the **Infrawaves** team. We focus on performance and flexibility, aiming to provide a **lightweight** and **accurate** simulation environment to help developers efficiently conduct research and development work. Let's work together to enhance productivity and explore more possibilities.
 
-[简体中文]: README_CN.md
+[简体中文]: README_CN.md	"简体中文"
 
 ## User Guide
 
