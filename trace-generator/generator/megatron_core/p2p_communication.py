@@ -27,6 +27,7 @@ recv_map: Dict[int, Dict[Tuple, int]] = {}
 comp_unique_id: int = 0
 
 CREATING_TEMPLATE: bool = False
+_TIME_CUDA_SYNC: bool = True
 
 def is_creating_template():
     global CREATING_TEMPLATE
@@ -760,7 +761,20 @@ def send_forward_recv_forward(
     # if config.timers is not None:
     #     config.timers('forward-send-forward-recv').stop()
     if overlap_p2p_comm:
-        return input_tensor, wait_handles
+        global _TIME_CUDA_SYNC
+        if _TIME_CUDA_SYNC:
+            # the timer has cuda_synchronize
+            from generator.utils import (
+                form_comp_node_custom,
+                merge_branch_nodes
+            )
+            timer_sync_node = form_comp_node_custom("timer_sync_node")
+            if len(wait_handles[1]) >= 1:
+                merge_branch_nodes([trace.get_last_node_name()], wait_handles[1], trace, True)
+            trace.add_node_with_ctrl_deps(timer_sync_node)
+            return input_tensor, ()
+        else:
+            return input_tensor, wait_handles
     return input_tensor, ()
 
 def send_backward_recv_backward(
@@ -790,7 +804,20 @@ def send_backward_recv_backward(
     # if config.timers is not None:
     #     config.timers('backward-send-backward-recv').stop()
     if overlap_p2p_comm:
-        return output_tensor_grad, wait_handles
+        global _TIME_CUDA_SYNC
+        if _TIME_CUDA_SYNC:
+            # the timer has cuda_synchronize
+            from generator.utils import (
+                form_comp_node_custom,
+                merge_branch_nodes
+            )
+            timer_sync_node = form_comp_node_custom("timer_sync_node")
+            if len(wait_handles[1]) >= 1:
+                merge_branch_nodes([trace.get_last_node_name()], wait_handles[1], trace, True)
+            trace.add_node_with_ctrl_deps(timer_sync_node)
+            return output_tensor_grad, ()
+        else:
+            return output_tensor_grad, wait_handles
     return output_tensor_grad, ()
 
 def send_forward_backward_recv_forward_backward(

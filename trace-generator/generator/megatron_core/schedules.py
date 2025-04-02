@@ -753,7 +753,8 @@ def forward_backward_pipelining_with_interleaving(
         merge_branch_nodes(
             ctrl_deps=[wait_handles[0]],
             branch_nodes=wait_handles[1],
-            trace=trace
+            trace=trace,
+            split_merge=True
         )
         wait_handles = ()
 
