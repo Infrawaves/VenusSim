@@ -160,10 +160,10 @@ bool CommunicatorGroup::if_multi_group(std::map<int, std::vector<int>>& coordina
   }
 
   // Deduplicate the frequencies and check if all values are equal
-  std::unordered_set<int> unique_counts;
+  std::set<int> unique_counts;
   for (const auto& pair : id_times) {
       unique_counts.insert(pair.second);
   }
 
-  return unique_counts.size() == 1 && id_times.size() > 1;
+  return unique_counts.size() == 1 && id_times.size() > 1 *unique_counts.begin() > 1;
 }
