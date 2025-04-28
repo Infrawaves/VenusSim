@@ -7,6 +7,7 @@ LICENSE file in the root directory of this source tree.
 #include <astra-network-analytical/common/NetworkParser.hh>
 #include <astra-network-analytical/congestion_unaware/Helper.hh>
 #include <remote_memory_backend/analytical/AnalyticalRemoteMemory.hh>
+#include "common/CommonTraceParser.hh"
 #include "common/CmdLineParser.hh"
 #include "congestion_unaware/CongestionUnawareNetworkApi.hh"
 #include <sys/time.h>
@@ -86,42 +87,12 @@ int main(int argc, char* argv[]) {
     queues_per_dim.push_back(num_queues_per_dim);
   }
 
-  //get trace output rule and file
-  std::ifstream fin;
-  std::vector<int> trace_output_mapping_id;
-  trace_output_mapping_id.resize(npus_count, -1);
-  fin.open(trace_output_rule);
-  if(fin.is_open()){
-    uint64_t size, index;
-    fin>>size;
-    for(int i=0;i<size;i++){
-      fin>>index;
-      trace_output_mapping_id[index] = i;
-    }
-  }
-  fin.close();
-
-  std::vector<std::map<std::string, int>> trace_template_mapping_id;
-  trace_template_mapping_id.resize(npus_count, {{"template_id", -1}, {"prev_rank", -1}, {"next_rank", -1}});
-  fin.open(trace_template_mapping);
-  if(fin.is_open()){
-    uint64_t size, index, mapping_id, prev_rank, next_rank;
-    fin>>size;
-    for(int i=0;i<size;i++){
-      fin>>index>>mapping_id>>prev_rank>>next_rank;
-      trace_template_mapping_id[index]["template_id"] = mapping_id;
-      trace_template_mapping_id[index]["prev_rank"] = prev_rank;
-      trace_template_mapping_id[index]["next_rank"] = next_rank;
-    }
-  }
-  fin.close();
-
-  std::ofstream trace_output;
-  trace_output.open(trace_output_file);
-  if(!trace_output.is_open()){
-    std::cout<<trace_output_file<<" open fail."<<std::endl;
-    exit(1);
-  }
+  TraceParser trace_parser(
+    trace_output_file,
+    trace_output_rule,
+    trace_template_mapping,
+    npus_count
+  );
 
   for (int i = 0; i < npus_count; i++) {
     // create network and system
@@ -138,9 +109,10 @@ int main(int argc, char* argv[]) {
         injection_scale,
         comm_scale,
         rendezvous_protocol,
-        trace_template_mapping_id[i], 
-        trace_output_mapping_id[i],
-        &trace_output);
+        trace_parser.get_trace_template_mapping(i),
+        trace_parser.get_trace_output_mapping(i),
+        trace_parser.get_trace_output(i)
+        );
 
     // push back network and system
     network_apis.push_back(std::move(network_api));

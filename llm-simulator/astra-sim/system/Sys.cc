@@ -150,7 +150,7 @@ Sys::Sys(
     bool rendezvous_enabled,
     std::map<std::string, int> trace_template_mapping_id,
     int trace_output_mapping_id,
-    std::ofstream* trace_output) {
+    std::shared_ptr<std::ofstream> trace_output) {
   if ((id + 1) > this->all_sys.size()) {
     this->all_sys.resize(id + 1);
   }
@@ -291,8 +291,10 @@ Sys::Sys(
 
   if(trace_output != nullptr)
     this->trace_output = trace_output;
-  else
-    this->trace_output = &cout;
+  else{
+    std::cout<<"trace_output not define."<<std::endl;
+    exit(1);
+  }
 
   this->initialized = true;
 }

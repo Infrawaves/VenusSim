@@ -75,7 +75,7 @@ class Sys : public Callable {
       bool rendezvous_enabled,
       std::map<std::string, int> trace_template_mapping_id={},
       int trace_output_mapping_id=-1,
-      std::ofstream* trace_output=nullptr);
+      std::shared_ptr<std::ofstream> trace_output=nullptr);
   ~Sys();
   //---------------------------------------------------------------------------
 
@@ -332,7 +332,7 @@ class Sys : public Callable {
 
   // system trace output
   int trace_output_mapping_id;
-  std::ostream* trace_output;
+  std::shared_ptr<std::ostream> trace_output;
 };
 
 } // namespace AstraSim

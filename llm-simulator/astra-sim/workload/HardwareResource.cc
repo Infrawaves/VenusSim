@@ -28,7 +28,7 @@ void HardwareResource::occupy(const shared_ptr<SelectETFeederNode> node) {
       assert(num_in_flight_gpu_comp_ops == 0);
       ++num_in_flight_gpu_comp_ops;
     } else{
-      assert(num_in_flight_gpu_comm_ops == 0);
+      assert(num_in_flight_gpu_comm_ops >= 0);
       ++num_in_flight_gpu_comm_ops;
     }
   }
@@ -48,7 +48,7 @@ void HardwareResource::release(const shared_ptr<SelectETFeederNode> node) {
       assert(num_in_flight_gpu_comp_ops == 0);
     } else {
       --num_in_flight_gpu_comm_ops;
-      assert(num_in_flight_gpu_comm_ops == 0);
+      assert(num_in_flight_gpu_comm_ops >= 0);
     }
   }
 }
@@ -72,7 +72,7 @@ bool HardwareResource::is_available(
           return false;
         }
       } else {
-        if (num_in_flight_gpu_comm_ops == 0) {
+        if (num_in_flight_gpu_comm_ops >= 0) {
           return true;
         } else {
           return false;

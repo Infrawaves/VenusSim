@@ -7,6 +7,7 @@ LICENSE file in the root directory of this source tree.
 #include <astra-network-analytical/common/NetworkParser.hh>
 #include <astra-network-analytical/congestion_aware/Helper.hh>
 #include <remote_memory_backend/analytical/AnalyticalRemoteMemory.hh>
+#include "common/CommonTraceParser.hh"
 #include "common/CmdLineParser.hh"
 #include "congestion_aware/CongestionAwareNetworkApi.hh"
 
@@ -39,21 +40,12 @@ int main(int argc, char* argv[]) {
   const auto injection_scale = cmd_line_parser.get<double>("injection-scale");
   const auto rendezvous_protocol =
       cmd_line_parser.get<bool>("rendezvous-protocol");
-  const auto trace_output_file = 
+      const auto trace_output_file = 
       cmd_line_parser.get<std::string>("trace-output-file");
-
-  std::cout<<">> arguments: "<<std::endl;
-  std::cout<<">>> num_queues_per_dim: "<<num_queues_per_dim<<std::endl;
-  std::cout<<">>> comm_scale: "<<comm_scale<<std::endl;
-  std::cout<<">>> injection_scale: "<<injection_scale<<std::endl;
-  std::cout<<">>> rendezvous_protocol: "<<rendezvous_protocol<<std::endl;
-  
-  std::ofstream trace_output;
-  trace_output.open(trace_output_file);
-  if(!trace_output.is_open()){
-    std::cout<<trace_output_file<<" open fail."<<std::endl;
-    exit(1);
-  }
+  const auto trace_output_rule = 
+      cmd_line_parser.get<std::string>("trace-output-rule");
+  const auto trace_template_mapping = 
+      cmd_line_parser.get<std::string>("trace-template-mapping");
 
   // Instantiate event queue
   const auto event_queue = std::make_shared<EventQueue>();
@@ -83,6 +75,13 @@ int main(int argc, char* argv[]) {
     queues_per_dim.push_back(num_queues_per_dim);
   }
 
+  TraceParser trace_parser(
+    trace_output_file,
+    trace_output_rule,
+    trace_template_mapping,
+    npus_count
+  );
+
   for (int i = 0; i < npus_count; i++) {
     // create network and system
     auto network_api = std::make_unique<CongestionAwareNetworkApi>(i);
@@ -98,9 +97,10 @@ int main(int argc, char* argv[]) {
         injection_scale,
         comm_scale,
         rendezvous_protocol,
-        {},
-        -1, 
-        &trace_output);
+        trace_parser.get_trace_template_mapping(i),
+        trace_parser.get_trace_output_mapping(i),
+        trace_parser.get_trace_output(i)
+        );
 
     // push back network and system
     network_apis.push_back(std::move(network_api));

@@ -117,7 +117,8 @@ def form_comp_node_custom(comp_name: str = "", num_ops: int = 1, tensor_size: in
 def merge_branch_nodes(
     ctrl_deps: List[str], 
     branch_nodes: List[TraceNode], 
-    trace: PytorchPlusTrace
+    trace: PytorchPlusTrace,
+    split_merge: bool = False
 ):
     '''
     branch_nodes: [b-0, b-1, b-2, ..., b-z]
@@ -125,23 +126,37 @@ def merge_branch_nodes(
     ctrl_deps: [n-0, n-1]
     
     after merge:
-    trace:  [n-0, n-1, n-2, ..., n-m]--------[merge node]
-              |    |                      |
-              --------[b-0, ..., b-z]------
+        no split merge:
+        trace:  [n-0, n-1, n-2, ..., n-m]--------[merge node]
+                |    |                      |
+                --------[b-0, ..., b-z]------
+        
+        split merge:
+        trace:  [n-0, n-1, n-2, ..., n-m]--------[merge node]
+                |    |                      |
+                -------------[b-0]-----------
+                -------------[...]-----------
+                -------------[b-z]-----------
     '''
     assert len(branch_nodes) >= 1 and len(ctrl_deps) >= 1, \
         "branch_nodes or ctrl_deps is illegal."
     last_node_name_before_merge = trace.get_last_node_name()
     merge_node_ctrl_name_list: List[str] = [last_node_name_before_merge]
 
-    for i in range(len(branch_nodes)):
-        branch_node = branch_nodes[i]
-        if i == 0:
-            trace.add_node_with_ctrl_deps(branch_node, ctrl_deps)
-        else:
-            trace.add_node_with_ctrl_deps(branch_node, [branch_nodes[i-1].name])
+    if not split_merge:
+        for i in range(len(branch_nodes)):
+            branch_node = branch_nodes[i]
+            if i == 0:
+                trace.add_node_with_ctrl_deps(branch_node, ctrl_deps)
+            else:
+                trace.add_node_with_ctrl_deps(branch_node, [branch_nodes[i-1].name])
             
-    merge_node_ctrl_name_list.append(branch_nodes[-1].name)
+        merge_node_ctrl_name_list.append(branch_nodes[-1].name)
+    else:
+        for i in range(len(branch_nodes)):
+            branch_node = branch_nodes[i]
+            trace.add_node_with_ctrl_deps(branch_node, ctrl_deps)
+            merge_node_ctrl_name_list.append(branch_node.name)
 
     merge_node = form_comp_node_custom(comp_name="merge_branch", num_ops=1, tensor_size=1)
     trace.add_node_with_ctrl_deps(merge_node, merge_node_ctrl_name_list)
