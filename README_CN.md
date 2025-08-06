@@ -40,7 +40,7 @@ git clone git@github.com:cq-eng/VenusSim.git
 cd /home/VenusSim
 pip3 install --upgrade pip
 pip3 install protobuf==3.6.1 pydot
-cd VenusSim
+cd llm-simulator
 chmod 777 ./build/astra_analytical/build.sh
 ./build/astra_analytical/build.sh
 
