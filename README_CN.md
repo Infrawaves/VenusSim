@@ -80,7 +80,7 @@ bash build.sh
 
 ### 2. 修改配置文件
 
-配置文件位于trace-generator/demo/VenusSim中
+配置文件位于trace-generator/demo/llm-sim-config中
 
 - llm-sim-config.json
 - Sim-config
