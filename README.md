@@ -37,11 +37,9 @@ apt install \
     git
 #Pull VenusSim
 git clone git@github.com:cq-eng/VenusSim.git
-#Change Directory
-mv VenusSim llm-sim-project
 
 #astra-sim
-cd /home/llm-sim-project
+cd /home/VenusSim
 pip3 install --upgrade pip
 pip3 install protobuf==3.6.1 pydot
 cd llm-simulator
@@ -49,7 +47,7 @@ chmod 777 ./build/astra_analytical/build.sh
 ./build/astra_analytical/build.sh
 
 # chakra_linker_visualizer
-cd /home/llm-sim-project
+cd /home/VenusSim
 python3 -m venv chakra_env
 source chakra_env/bin/activate
 cd chakra_linker_visualizer
@@ -69,7 +67,7 @@ bash build.sh
 After completing the container construction, the /home directory should have the following file structure:
 
 ```Python
-/home/llm-sim-project
+/home/VenusSim
     # Python virtual environment, used for chakra_lingker_visualizer and generator.
     /chakra_env
     # Chakra native trace_linker and timeline_visualizer.
@@ -193,10 +191,10 @@ After confirming the installation and configuration files are correct, you can e
 
 ```Python
 # Enter the virtual environment
-source /home/llm-sim-project/chakra_env/bin/activate
+source /home/VenusSim/chakra_env/bin/activate
 
 # Switch to the trace-generator directory
-cd /home/llm-sim-project/trace-generator
+cd /home/VenusSim/trace-generator
 
 # Run the simulation program, and fill in the path to llm-sim-config.json according to the actual path.
 python3 llm_sim.py --config-file demo/llm-sim-example/llm-sim-config.json
@@ -205,4 +203,5 @@ python3 llm_sim.py --config-file demo/llm-sim-example/llm-sim-config.json
 ### 4. View the simulation results
 
 1. Open <https://ui.perfetto.dev/> in your browser.
+
 2. Open the visualization output file specified by `time_line_visualizer_config:output_filename` in `llm-sim-config.json` at the above URL to view the visual simulation results.
