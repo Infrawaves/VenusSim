@@ -37,7 +37,7 @@ apt install \
 git clone git@github.com:cq-eng/VenusSim.git
 
 #astra-sim
-cd /home/llm-sim-project
+cd /home/VenusSim
 pip3 install --upgrade pip
 pip3 install protobuf==3.6.1 pydot
 cd VenusSim
