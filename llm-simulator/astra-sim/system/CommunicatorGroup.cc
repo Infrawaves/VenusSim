@@ -165,5 +165,5 @@ bool CommunicatorGroup::if_multi_group(std::map<int, std::vector<int>>& coordina
       unique_counts.insert(pair.second);
   }
 
-  return unique_counts.size() == 1 && id_times.size() > 1 *unique_counts.begin() > 1;
+  return unique_counts.size() == 1 && id_times.size() > 1 && *unique_counts.begin() > 1;
 }
