@@ -35,19 +35,17 @@ apt install \
     git
 #拉取VenusSim
 git clone git@github.com:cq-eng/VenusSim.git
-#改目录
-mv VenusSim llm-sim-project
 
 #astra-sim
 cd /home/llm-sim-project
 pip3 install --upgrade pip
 pip3 install protobuf==3.6.1 pydot
-cd llm-simulator
+cd VenusSim
 chmod 777 ./build/astra_analytical/build.sh
 ./build/astra_analytical/build.sh
 
 # chakra_linker_visualizer
-cd /home/llm-sim-project
+cd /home/VenusSim
 python3 -m venv chakra_env
 source chakra_env/bin/activate
 cd chakra_linker_visualizer
@@ -67,7 +65,7 @@ bash build.sh
 完成容器构建后，/home目录下应有如下文件结构：
 
 ```Python
-/home/llm-sim-project
+/home/VenusSim
     # python虚拟环境，用于chakra_lingker_visualizer和generator
     /chakra_env
     # chakra原生trace_linker和timeline_visualizer
@@ -82,7 +80,7 @@ bash build.sh
 
 ### 2. 修改配置文件
 
-配置文件位于trace-generator/demo/llm-sim-example中
+配置文件位于trace-generator/demo/VenusSim中
 
 - llm-sim-config.json
 - Sim-config
@@ -189,10 +187,10 @@ latency: [ 1000.0, 6000.0 ]  # ns
 
 ```Python
 # 进入虚拟环境
-source /home/llm-sim-project/chakra_env/bin/activate
+source /home/VenusSim/chakra_env/bin/activate
 
 # 进入trace-generator目录
-cd /home/llm-sim-project/trace-generator
+cd /home/VenusSim/trace-generator
 
 # 运行仿真程序,llm-sim-config.json的路径根据实际路径填写
 python3 llm_sim.py --config-file demo/llm-sim-example/llm-sim-config.json
