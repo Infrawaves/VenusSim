@@ -31,7 +31,7 @@
         "swiglu": 1,
         "untie-embeddings-and-output-weights": 0,
 
-        "output_filepath": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace",
+        "output_filepath": "/home/VenusSim/trace-generator/demo/llm-sim-example/trace",
         "output_filename": "demo", 
         "log_filename": "demo.log",
 
@@ -47,15 +47,15 @@
         "keep_json_files": 0
     },
     "simulator_config": {
-        "binary": "/home/llm-sim-project/llm-simulator/build/astra_analytical/build/bin/AstraSim_Analytical_Congestion_Unaware",
-        "system": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/system.json",
-        "network": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/network.yml",
-        "remote_memory": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/memory.json",
-        "comm_group": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/sim-config/comm-group.json",
-        "trace_output": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace_output.log"
+        "binary": "/home/VenusSim/llm-simulator/build/astra_analytical/build/bin/AstraSim_Analytical_Congestion_Unaware",
+        "system": "/home/VenusSim/trace-generator/demo/llm-sim-example/sim-config/system.json",
+        "network": "/home/VenusSim/trace-generator/demo/llm-sim-example/sim-config/network.yml",
+        "remote_memory": "/home/VenusSim/trace-generator/demo/llm-sim-example/sim-config/memory.json",
+        "comm_group": "/home/VenusSim/trace-generator/demo/llm-sim-example/sim-config/comm-group.json",
+        "trace_output": "/home/VenusSim/trace-generator/demo/llm-sim-example/trace_output.log"
     },
     "time_line_visualizer_config": {
-        "output_filename": "/home/llm-sim-project/trace-generator/demo/llm-sim-example/trace_output.json",
+        "output_filename": "/home/VenusSim/trace-generator/demo/llm-sim-example/trace_output.json",
         "single_pp_group": 0
     }
 }
